@@ -12,7 +12,7 @@ public class SpringRootTestApplication {
 //        SpringApplication.run(SpringRootTestApplication.class, args);
         SpringApplication app  = new SpringApplication(SpringRootTestApplication.class);
         app.setDefaultProperties(Collections
-                .singletonMap("server.port", "8081"));
+                .singletonMap("server.port", "8088"));
         app.run(args);
     }
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<library id="baseLibrary">
+    <book id="001">
+        <title>Java Programming</title>
+        <author>John Smith</author>
+        <year>2022</year>
+    </book>
+    <book id="002">
+        <title>Python Basics</title>
+        <author>Jane Doe</author>
+        <year>2021</year>
+    </book>
+</library>
