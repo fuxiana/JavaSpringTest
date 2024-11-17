@@ -7,6 +7,9 @@ package com.xiaofutest.model;
 
 public class LogisticsDTO {
 
+    // id
+    private Integer id;
+
     // 文案
     private String title;
 
@@ -19,18 +22,24 @@ public class LogisticsDTO {
     // 主角
     private String protagonist;
 
-    public LogisticsDTO() {
-    }
 
-    public LogisticsDTO(String title, String year, String author, String protagonist) {
+    public LogisticsDTO(Integer id, String title, String year, String author, String protagonist) {
+        this.id = id;
         this.title = title;
         this.year = year;
         this.author = author;
         this.protagonist = protagonist;
     }
 
+    public Integer getId() {
+        return this.id;
+    }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getTitle() {
-        return title;
+        return this.title;
     }
     public void setTitle(String title) {
         this.title = title;

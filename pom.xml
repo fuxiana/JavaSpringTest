@@ -114,6 +114,14 @@
             <version>7.1.15</version>
             <type>pom</type>
         </dependency>
+
+
+        <!-- Maven dependency for MySQL JDBC driver -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.23</version>
+        </dependency>
     </dependencies>
 
     <build>
