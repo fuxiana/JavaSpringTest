@@ -122,6 +122,14 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.23</version>
         </dependency>
+
+        <!-- 小辣椒 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -129,6 +137,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
