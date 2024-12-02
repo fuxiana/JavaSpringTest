@@ -24,16 +24,33 @@ public class Login {
 
     @PostMapping("/submit")
     public BaseResponse<Boolean> submit(HttpServletRequest request, @RequestBody LoginDTO loginDTO){
-
         if(ObjectUtils.isEmpty(loginDTO.getUsername())){
-            throw  new BusinessException(ErrorCode.PARAMS_ERROR, "账号不能为空");
+            throw  new BusinessException(ErrorCode.NULL_ERROR, "账号不能为空");
         }
         if(ObjectUtils.isEmpty(loginDTO.getPassword())){
-            throw  new BusinessException(ErrorCode.PARAMS_ERROR, "密码不能为空");
+            throw  new BusinessException(ErrorCode.NULL_ERROR, "密码不能为空");
         }
 
         Boolean aBoolean = LoginDB.login(loginDTO);
+        if(!aBoolean){
+            throw  new BusinessException(ErrorCode.PARAMS_ERROR, "账号密码错误，请重新输入");
+        }
+        return ResultUtils.success(aBoolean);
+    }
 
+    @PostMapping("/register")
+    public BaseResponse<Boolean> register(HttpServletRequest request, @RequestBody LoginDTO loginDTO){
+        if(ObjectUtils.isEmpty(loginDTO.getUsername())){
+            throw  new BusinessException(ErrorCode.NULL_ERROR, "账号不能为空");
+        }
+        if(ObjectUtils.isEmpty(loginDTO.getPassword())){
+            throw  new BusinessException(ErrorCode.NULL_ERROR, "密码不能为空");
+        }
+
+        Boolean aBoolean = LoginDB.query(loginDTO);
+        if(aBoolean){
+            throw  new BusinessException(ErrorCode.PARAMS_ERROR, "注册失败，已有相同账号");
+        }
         return ResultUtils.success(aBoolean);
     }
 }

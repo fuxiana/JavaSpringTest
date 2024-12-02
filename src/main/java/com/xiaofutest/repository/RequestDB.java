@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 public class RequestDB {
     public static Connection getConnection() {
         // 数据库连接URL，格式为：jdbc:子协议:子名称
-        String url = "jdbc:mysql://121.40.222.45/test_db?useSSL=false&serverTimezone=UTC";
+        String url = "jdbc:mysql://121.40.222.45/test_db?useUnicode=true&useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8";
         // 数据库用户名与密码
         String user = "root";
         String password = "fuxianan19961003";
