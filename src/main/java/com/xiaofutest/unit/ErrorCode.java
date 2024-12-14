@@ -10,7 +10,12 @@ public enum ErrorCode {
     NULL_ERROR(40001,"请求参数为空",""),
     NO_LOGIN(40100,"未登录",""),
     NO_AUTH(40101,"暂无权限访问",""),
-    SYSTEM_ERROR(50000,"系统内部异常","")
+    SYSTEM_ERROR(50000,"系统内部异常",""),
+    NO_TOKEN(400,"无token，请重新登录", ""),
+    TOKEN_EX(401,"token验证失败，请重新登录,3秒钟后自动跳转到登入页面",""),
+
+    USER_EX(402,"用户不存在，请重新登录",""),
+    VERIFICATION_FAILED(406, "权限校验失败", "")
             ;
     //返回码
     private final int code;

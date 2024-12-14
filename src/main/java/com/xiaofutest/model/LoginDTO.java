@@ -20,6 +20,19 @@ public class LoginDTO {
      */
     private String password;
 
+
+    /**
+     * token
+     */
+    private String token;
+
+    public LoginDTO(Long id, String username, String password, String token) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.token = token;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -44,5 +57,13 @@ public class LoginDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

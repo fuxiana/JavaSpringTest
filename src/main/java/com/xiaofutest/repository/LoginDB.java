@@ -14,18 +14,52 @@ import java.sql.SQLException;
 public class LoginDB {
     public static Boolean login(LoginDTO loginDTO){
         String sql = "SELECT * FROM `test_db`.`user` WHERE username=? AND password=?";
-        Boolean b = false;
         Connection connection = RequestDB.getConnection();
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, loginDTO.getUsername());
             preparedStatement.setString(2, loginDTO.getPassword());
             ResultSet rs = preparedStatement.executeQuery();
             return rs.next();
-
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
 
+    public static LoginDTO selectByUsernameAndPwd(String userName, String passWord){
+        String sql = "SELECT * FROM `test_db`.`user` WHERE username=? AND password=?";
+        Connection connection = RequestDB.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1,userName);
+            preparedStatement.setString(2, passWord);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) { // 移动到结果集的下一条记录
+                return new LoginDTO((long) rs.getInt("id"),rs.getString("username"),rs.getString("password"),rs.getString("token"));
+            }else {
+                return  null;
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static LoginDTO getById(String id){
+        String sql = "SELECT * FROM `test_db`.`user` WHERE id=?";
+        Connection connection = RequestDB.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) { // 移动到结果集的下一条记录
+                return new LoginDTO((long) rs.getInt("id"),rs.getString("username"),rs.getString("password"),rs.getString("token"));
+            }else {
+                return  null;
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
