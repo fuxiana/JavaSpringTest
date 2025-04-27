@@ -25,7 +25,8 @@ public class BookDB {
                         resultSet.getString("title"),
                         resultSet.getString("year"),
                         resultSet.getString("author"),
-                        resultSet.getString("protagonist")
+                        resultSet.getString("protagonist"),
+                        null
                         ));
             }
             connection.close();

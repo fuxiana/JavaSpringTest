@@ -1,5 +1,7 @@
 package com.xiaofutest.model;
 
+import java.util.Map;
+
 /**
  * @author :xs
  * @date : 2024/9/25
@@ -22,13 +24,16 @@ public class LogisticsDTO {
     // 主角
     private String protagonist;
 
+    private Map<String, Map<String, String>> resultData;
 
-    public LogisticsDTO(Integer id, String title, String year, String author, String protagonist) {
+
+    public LogisticsDTO(Integer id, String title, String year, String author, String protagonist, Map<String, Map<String, String>> resultData) {
         this.id = id;
         this.title = title;
         this.year = year;
         this.author = author;
         this.protagonist = protagonist;
+        this.resultData = resultData;
     }
 
     public Integer getId() {
@@ -62,8 +67,14 @@ public class LogisticsDTO {
     public String getProtagonist() {
         return protagonist;
     }
-
     public void setProtagonist(String protagonist) {
         this.protagonist = protagonist;
+    }
+
+    public Map<String, Map<String, String>> getResultData() {
+        return resultData;
+    }
+    public void setResultData( Map<String, Map<String, String>> protagonist) {
+        this.resultData = resultData;
     }
 }

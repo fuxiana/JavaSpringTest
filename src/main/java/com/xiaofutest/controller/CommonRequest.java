@@ -106,8 +106,8 @@ public class CommonRequest {
         List <LogisticsDTO> logisticsDTOS ;
         if(pdfTableRequest == null || CollectionUtils.isEmpty(pdfTableRequest.getPdfTableList())){
             logisticsDTOS = new ArrayList<>(){{
-                add( new LogisticsDTO(1,"平凡的世界","1986年","路遥","孙少安、孙少平"));
-                add( new LogisticsDTO(2,"繁花","2012年","金宇澄","沪生、阿宝、小毛"));
+                add( new LogisticsDTO(1,"平凡的世界","1986年","路遥","孙少安、孙少平",null));
+                add( new LogisticsDTO(2,"繁花","2012年","金宇澄","沪生、阿宝、小毛",null));
             }};
         }else {
             logisticsDTOS = pdfTableRequest.getPdfTableList();
