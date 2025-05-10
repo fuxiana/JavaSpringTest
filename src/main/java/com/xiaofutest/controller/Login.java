@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.sql.SQLException;
+
 /**
  * @author :fuxianan
  * @date : 2024/11/29
@@ -48,7 +50,7 @@ public class Login {
 
     @PostMapping("/register")
     @PassToken
-    public BaseResponse<Boolean> register(HttpServletRequest request, @RequestBody LoginDTO loginDTO){
+    public BaseResponse<Boolean> register(HttpServletRequest request, @RequestBody LoginDTO loginDTO) throws SQLException {
         if(ObjectUtils.isEmpty(loginDTO.getUsername())){
             throw  new BusinessException(ErrorCode.NULL_ERROR, "账号不能为空");
         }
@@ -60,6 +62,9 @@ public class Login {
         if(aBoolean){
             throw  new BusinessException(ErrorCode.PARAMS_ERROR, "注册失败，已有相同账号");
         }
-        return ResultUtils.success(aBoolean);
+
+        boolean b = LoginDB.registerUser(loginDTO);
+
+        return ResultUtils.success(b);
     }
 }

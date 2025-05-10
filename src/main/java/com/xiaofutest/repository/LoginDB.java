@@ -79,7 +79,7 @@ public class LoginDB {
         }
     }
 
-    private boolean registerUser(LoginDTO loginDTO) throws SQLException {
+    public static boolean registerUser(LoginDTO loginDTO) throws SQLException {
         String sql = "INSERT INTO `test_db`.`user` (username, password) VALUES (?, ?)";
         Connection connection = RequestDB.getConnection();
         PreparedStatement stmt = connection.prepareStatement(sql);

@@ -1,17 +1,25 @@
 package com.xiaofutest.controller;
 
+import cn.hutool.core.io.resource.ClassPathResource;
+import cn.hutool.core.io.resource.Resource;
 import com.xiaofutest.Config.token.PassToken;
 import com.xiaofutest.model.LogisticsDTO;
 import com.xiaofutest.repository.BookDB;
 import com.xiaofutest.unit.BaseResponse;
+import com.xiaofutest.unit.ErrorCode;
 import com.xiaofutest.unit.ResultUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -23,7 +31,7 @@ import java.util.*;
 @RequestMapping("/book")
 public class LogisticsRequest<IWorksheet> {
     // 目标文件路径
-    private static final String EXCEL_PATH = "/Users/fuxianan/Desktop/后端项目/spring-root-test/src/main/resources/汇丰4.14-4.20纯销.xlsx";
+    private static final Resource EXCEL_PATH = new ClassPathResource("汇丰4.14-4.20纯销.xlsx");
 
     @GetMapping("/list")
     public BaseResponse<List<LogisticsDTO>> list()  {
@@ -42,7 +50,6 @@ public class LogisticsRequest<IWorksheet> {
     }
 
     @GetMapping("/getExcel")
-    @PassToken
     public List<List<String>> getExcel(HttpServletRequest request){
         String filePath = "/Users/fuxianan/Desktop/后端项目/spring-root-test/src/main/resources/风险提醒清单Excel.xlsx";
         String sheetName = "风险清单";
@@ -88,24 +95,39 @@ public class LogisticsRequest<IWorksheet> {
     }
 
     @PostMapping("/generateExcel")
-    @PassToken
-    public ResponseEntity<String> generateExcel(@RequestBody LogisticsDTO logisticsDTO) {
+    public ResponseEntity<org.springframework.core.io.Resource> generateExcel(@RequestBody LogisticsDTO logisticsDTO) {
         try (Workbook workbook = new XSSFWorkbook()) {
             // 1. 创建 Sheet 和表头
             Sheet sheet = workbook.createSheet("纯销数据");
             createHeaderAndData(sheet, logisticsDTO.getResultData());
 
             // 2. 确保目标目录存在
-            File file = new File(EXCEL_PATH);
+            File file = new File(EXCEL_PATH.getUrl().getFile());
             file.getParentFile().mkdirs();
 
             // 3. 写入文件
             try (FileOutputStream fos = new FileOutputStream(file)) {
                 workbook.write(fos);
-                return ResponseEntity.ok("Excel 文件保存成功");
+
+                // 创建文件资源对象
+                org.springframework.core.io.Resource resource = new FileSystemResource(file);
+
+
+                // 设置响应头
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+                headers.setContentLength(file.length());
+                headers.setContentDisposition(ContentDisposition.attachment()
+                        .filename(resource.getFilename(), StandardCharsets.UTF_8)
+                        .build());
+
+                // 返回文件和响应头
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .body(resource);
             }
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("保存失败: " + e.getMessage());
+            return ResponseEntity.notFound().build();
         }
 
     }
