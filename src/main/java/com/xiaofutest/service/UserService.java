@@ -2,14 +2,27 @@ package com.xiaofutest.service;
 
 import com.xiaofutest.model.wx.*;
 import com.xiaofutest.unit.JwtUtil;
+import com.xiaofutest.unit.PropertyUtils;
 import com.xiaofutest.unit.WxDataCryptUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class UserService {
+
+    private String appid = PropertyUtils.getProperty("wx.miniapp.appid");
+
+    private String secret = PropertyUtils.getProperty("wx.miniapp.secret");
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -39,16 +52,16 @@ public class UserService {
     public LoginResponse wxLogin(String code, UserInfo userInfo) {
         try {
             // 模拟获取openid（实际需要调用微信接口）
-            String openid = generateOpenid(code);
+            String token = generateOpenid(code);
 
             // 查找或创建用户
-            User user = findOrCreateUser(openid, userInfo);
+//            User user = findOrCreateUser(openid, userInfo);
 
             // 生成token
-            String token = jwtUtil.generateToken(openid);
+//            String token = jwtUtil.generateToken(openid);
 
             // 缓存用户信息到内存
-            cacheUserInfo(token, user);
+//            cacheUserInfo(token, user);
 
             LoginResponse response = new LoginResponse();
             response.setSuccess(true);
@@ -97,10 +110,47 @@ public class UserService {
     /**
      * 生成模拟的openid
      */
-    private String generateOpenid(String code) {
+    private String generateOpenid(String code) throws IOException {
         // 这里应该调用微信接口获取真实的openid
         // 暂时使用模拟数据
-        return "mock_openid_" + System.currentTimeMillis();
+        // 构造请求URL
+        String requestUrl = "https://api.weixin.qq.com/sns/jscode2session?appid=" + appid +
+                "&secret=" + secret +
+                "&js_code=" + code +
+                "&grant_type=authorization_code";
+
+        URL url = new URL(requestUrl);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+        try {
+            // 设置请求方法
+            connection.setRequestMethod("GET");
+            connection.setDoInput(true);
+
+            // 获取响应代码
+            int responseCode = connection.getResponseCode();
+            if (responseCode == 200) {
+                // 读取响应内容
+                InputStream inputStream = connection.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                StringBuilder response = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+                reader.close();
+
+                // 返回的响应体是一个JSON字符串，例如：{"openid": "OPENID", "session_key": "SESSIONKEY"}
+                return response.toString();
+            } else {
+                throw new Exception("HTTP request failed with error code: " + responseCode);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            connection.disconnect();
+        }
+//        return "mock_openid_" + System.currentTimeMillis();
     }
 
     /**
