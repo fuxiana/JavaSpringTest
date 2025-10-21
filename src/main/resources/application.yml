@@ -1,0 +1,23 @@
+# 调试模式
+debug: false  # 先关闭，避免日志太多
+
+# 服务器配置
+server:
+  port: 8088
+
+# Spring 配置
+spring:
+  application:
+    name: wechat-miniapp
+
+  # 关闭一些不必要的自动配置
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+
+# 日志配置
+logging:
+  level:
+    com.yourpackage: INFO
+    org.springframework: WARN

@@ -34,6 +34,7 @@ public class LogisticsRequest<IWorksheet> {
     private static final Resource EXCEL_PATH = new ClassPathResource("汇丰4.14-4.20纯销.xlsx");
 
     @GetMapping("/list")
+    @PassToken
     public BaseResponse<List<LogisticsDTO>> list()  {
         List<LogisticsDTO> logisticsDTOS = new ArrayList<>();
         logisticsDTOS = BookDB.query();
